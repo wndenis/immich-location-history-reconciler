@@ -1,7 +1,9 @@
 # syntax=docker/dockerfile:1
 
 # ---- Build stage ----
-FROM node:20-alpine AS build
+# Debian-based (glibc), matching the ubuntu-latest CI runner rather than
+# Alpine's musl libc, to avoid native-module behavior differences.
+FROM node:22-slim AS build
 WORKDIR /app
 
 # Enable pnpm via corepack, matching the CI workflow
