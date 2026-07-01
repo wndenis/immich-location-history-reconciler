@@ -5,7 +5,7 @@ FROM node:20-alpine AS build
 WORKDIR /app
 
 # Enable pnpm via corepack, matching the CI workflow
-RUN corepack enable && corepack use pnpm@latest
+RUN corepack enable && corepack prepare pnpm@latest --activate
 
 # Install dependencies first (better layer caching)
 COPY package.json pnpm-lock.yaml ./
@@ -21,7 +21,6 @@ ARG NUXT_APP_BASE_URL=/
 ENV NUXT_APP_BASE_URL=${NUXT_APP_BASE_URL}
 
 RUN pnpm exec nuxt build --preset github_pages
-
 
 # ---- Runtime stage ----
 FROM nginx:1.27-alpine AS runtime
